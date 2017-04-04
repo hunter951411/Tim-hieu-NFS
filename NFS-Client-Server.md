@@ -1,13 +1,13 @@
-Thiết lập NFS Mount trên Ubuntu 14.04
+##Thiết lập NFS Mount trên Ubuntu 14.04
 
 
-Giới thiệu
+###Giới thiệu
 
 NFS hay Network File System, là giao thức hệ thống tập tin phân tán cho phép bạn có thể mount các thư mục từ xa trên server của bạn. Điều này cho phép bạn tận dụng không gian lưu trữ ở một vị trí khác và để viết một cách dễ dàng đến cùng một không gian từ nhiều máy chủ. NFS hoạt động tốt cho các thư mục và sẽ phải được thư mục thường xuyên.
 
 Trong hướng dẫn này, chúng tôi sẽ giới thiệu cách cấu hình NFS mount trên máy chủ Ubuntu 14.04
 
-Điều kiện kiên quyết.
+###Điều kiện kiên quyết.
 
 Trong hướng dẫn này, chúng tôi sẽ cấu hình chia sẻ các thư mục giũa hai máy chủ Ubuntu 14.04. Chúng có thể có kích thước bất kỳ. Đối với mỗi máy chủ này, bạn sẽ phải có một tài khoản được thiết lập với quyền ưu tiên sudo. Bạn có thể tìm hiểu cách cấu hình một tài khoản như vậy bằng cách làm theo 1 – 4 trong hướng dẫn thiết lập ban đầu cho các máy chủ Ubuntu 14.04.
 
@@ -19,13 +19,14 @@ Host: 192.168.56.21
 
 Client 192.168.56.22
 
-Tải về và cài đặt các thành phần.
+###Tải về và cài đặt các thành phần.
 
 Trước khi chúng ta bắt đầu, bạn cần cài đặt các gói cần thiết trên cả 2 máy server host và server client.
 
 Trên máy chủ host, bạn cần cài đặt các gói nfs-kernel-server, sẽ cho phép họ chia sẻ những thư mục của họ. Đây là thao tác đầu tiên mà chúng tôi thực hiện với apt trong phiên này, chúng tôi sẽ làm mới các gói trước khi cài đặt:
 
 root@server:~# apt-get update
+
 root@server:~# apt-get install nfs-kernel-server
 
 Một khi những gói này được cài đặt, bạn có thể chuyển sang máy client.
@@ -35,7 +36,7 @@ Trên máy khách, chúng ta sẽ phải cài đặt một gói gọi là nfs-co
 root@client:~# apt-get update
 root@client:~# apt-get intstall nfs-common
 
-Tạo thư mục chia sẻ trên Máy chủ Host
+###Tạo thư mục chia sẻ trên Máy chủ Host
 
 Chúng ta sẽ thử nghiệm việc chia sẻ hai thư mục riêng trong hướng dẫn này. Thư mục đầu tiên chúng ta chia sẻ sẽ là thư mục /home có chứa dữ liệu người dùng. Thứ hai là thư mục đích chung mà chúng ta sẽ tạo ra đặc biệt cho NFS để chúng ta chứng minh cách thủ tục và các thiết lập phù hợp. Điều này sẽ được đặt tại /var/nfs.
 
@@ -51,7 +52,7 @@ root@server:~# chown nobody:nogroup /var/nfs
 
 Chúng tôi chỉ cần thay đổi quyền sở hữu trên các thư mục của chúng tôi được sử dụng đặc biệt để chia sẻ. Ví dụ, chúng tôi không muốn thay đổi quyền sở hữu thư mục /home của chúng tôi vì nó sẽ gây ra các sự cố cho bất kỳ người dùng nào chúng tôi có trên máy chủ.
 
-Cấu hình NFS Export trên Host Server
+###Cấu hình NFS Export trên Host Server
 
 Bây giờ chúng ta có thư mục của chúng ta được tạo và gán, chúng ta có thể lướt vào tập tin cấu hình NFS để thiết lập chia sẻ các tài nguyên này:
 
@@ -132,7 +133,7 @@ root@client:~# mount -t nfs
 
 Thao tác này sẽ hiển thị tất cả các gắn NFS hiện có truy cập trên máy client của bạn.
 
-Kiểm tra truy cập NFS
+###Kiểm tra truy cập NFS
 
 Bạn có thể kiểm tra quyền truy cập vào thư mục chia sẻ của bạn bằng cách viết một cái gì đó vào thư mục của bạn. Bạn có thể viết tập kiểm tra vào trong các thư mục như sau:
 
@@ -159,7 +160,7 @@ root@client:~# ls -l /mnt/nfs/var/nfs/test_var_nfs
 
 Như bạn thấy, tệp này đã được gán cho người dùng 'nobody' và nhóm 'nogroup'. Điều này theo cấu hình của chúng tôi
 
-Thực hiện gắn thư mục NFS từ xa từ động
+###Thực hiện gắn thư mục NFS từ xa từ động
 
 Chúng ta có thể thực hiện việc gắn các thư mục NFS từ xa tự động bằng cách thêm nó vào tệp fstab của chúng tôi trên máy client.
 
@@ -177,7 +178,7 @@ root@client:~# man nfs
 
 Điều này sẽ tự động gắn các phân vùng từ xa khi khởi động (có thể mất vài phút để kết nối được thực hiện và chia sẻ có sẵn).
 
-Ngừng gắn chia sẻ thư mục NFS từ xa
+###Ngừng gắn chia sẻ thư mục NFS từ xa
 
 Nếu bạn không còn muốn gắn thư mục từ xa được gắn kết trong hệ thống của mình, bạn có thể thao gắn kết dễ dàng bằng cách di chuyển ra khỏi cấu trúc thư mục chia sẻ và ngắt kết nối, như sau:
 
